@@ -1,0 +1,211 @@
+body {
+    font-family: Arial, sans-serif;
+    background-image: url("img/bg-main.jpg");
+    background-color: black;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: 100vh;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+header {
+    position: relative;
+    background-color: #4c0e69;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #a820e7;
+    box-shadow:
+        0 0 10px #a820e7,
+        0 0 20px rgba(168, 32, 231, 0.6),
+        inset 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.abertura, .operacoes, .resultados {
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(70, 70, 70, 0.315);
+    max-width: 70%;
+    height: 70%;
+    margin: 30px auto;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px gray;
+}
+
+
+h2 {
+color: #a820e7;
+text-align: center;
+}
+
+label {
+font-weight: bold;
+margin-top: 10px;
+color: white;
+}
+
+.open_account, .operacoes {
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+button, input, select {
+    background-color: #a820e7;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 14px 18px;
+    margin: 8px 0 14px 0;
+    width: 100%;
+    max-width: 320px;
+    height: auto;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #a820e7;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 6px 14px rgba(168,32,231,0.12);
+}
+
+.btn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    width: 100%;
+    max-width: 760px;
+    margin: 12px auto;
+    align-items: center;
+    justify-items: center;
+}
+
+.btn-grid > button {
+    width: 100%;
+    max-width: 320px;
+    padding: 14px 18px;
+    font-size: 1.05rem;
+    border-radius: 10px;
+}
+
+input[type="text"], input[type="number"], input[type="email"], textarea, select {
+    width: 100%;
+    max-width: 520px;
+    padding: 12px 14px;
+    font-size: 1rem;
+    color: #111;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.12);
+    border-radius: 10px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.06);
+    transition: border-color 150ms ease, box-shadow 150ms ease, transform 120ms ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+textarea { min-height: 90px; resize: vertical; }
+
+select { padding-right: 36px; background-image: linear-gradient(45deg, transparent 50%, rgba(0,0,0,0.4) 50%), linear-gradient(135deg, rgba(0,0,0,0.4) 50%, transparent 50%); background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px); background-size: 6px 6px, 6px 6px; background-repeat: no-repeat; }
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    color: #e9e6f7;
+    font-size: 0.95rem;
+}
+
+/* Estado de foco mais evidente */
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #a820e7;
+    box-shadow: 0 8px 20px rgba(168,32,231,0.12);
+    transform: translateY(-1px);
+}
+
+/* Placeholder */
+input::placeholder, textarea::placeholder {
+    color: #9a99a3;
+}
+
+.open_account input, .open_account select, .operacoes input, .operacoes select {
+    margin-bottom: 12px;
+}
+
+.btn-grid input, .btn-grid select { max-width: 420px; }
+
+
+button:hover {
+background-color: #b54fe4;
+}
+
+/* Cores por ação para melhor distinção */
+#btnAbrir {
+    background: linear-gradient(180deg,#7e15b1,#a820e7);
+    box-shadow: 0 8px 18px rgba(168,32,231,0.18);
+}
+#btnDepositar { background: linear-gradient(180deg,#169240,#1fbf4e); border-color: #12a43a; }
+#btnSacar { background: linear-gradient(180deg,#d36100,#ff8a2b); border-color: #d36100; }
+#btnSaldo { background: linear-gradient(180deg,#105fa6,#1481d6); border-color: #0f63a8; }
+#btnMov { background: linear-gradient(180deg,#5a5a5a,#7b7b7b); border-color: #5a5a5a; }
+#btnEncerrar { background: linear-gradient(180deg,#a80000,#ff3b3b); border-color: #a80000; }
+#btnTrocar { background: linear-gradient(180deg,#6a2fb5,#8e43f0); border-color: #6a2fb5; }
+
+button:disabled { opacity: 0.75; }
+
+button:disabled {
+background-color: #35015f6b;
+color: rgba(255, 255, 255, 0.356);
+border: none;
+cursor: not-allowed;
+}
+
+.resultado {
+    display: none;
+    margin-top: 15px;
+    color: white;
+    border-radius: 8px;
+    transition: background-color 180ms ease, box-shadow 180ms ease, padding 180ms ease, max-height 220ms ease;
+    overflow: hidden;
+}
+
+.resultado:not(:empty), .resultado.has-text {
+    display: block;
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+.resultado.has-text {
+    background-color: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.02);
+}
+
+.resultado strong {
+    color: #f6f3ff;
+}
+
+.horario {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 50px;
+    font-size: 22px;
+    font-weight: bold;
+    color: rgb(250, 233, 3);
+    Background-color: rgba(0, 0, 0, 0.5);
+    padding: 7px 12px;
+    border-radius: 5px;
+    border: 1px solid rgb(250, 233, 3);
+}

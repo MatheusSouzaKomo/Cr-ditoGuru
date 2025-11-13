@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Banco em JavaScript</title>
+    <link rel="stylesheet" href="style.css">
+     <script src="script.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Guru's Bank</h1>
+        <h2>O banco da tecnologia.</h2>
+        <div id="hora" class="horario"></div>
+    </header>
+
+    <main>
+        <section class="abertura">
+            <div class="open_account">
+            <h2>Abertura de Conta</h2>
+            <label>Nome do Cliente:</label>
+            <input type="text" id="nome">
+
+            <label>Tipo de Conta:</label>
+            <select id="tipoConta">
+                <option value="corrente">Conta Corrente</option>
+                <option value="poupanca">Conta Poupança</option>[
+                <option value="credito">Cartão de Crédito</option>]
+            </select>
+
+            <div class="btn-grid">
+                <button id="btnAbrir" onclick="abrirConta()">Abrir Conta</button>
+            </div>
+            <div class="resultado" id="resConta"></div>
+        </div>
+        </section>
+        <section class="operacoes">
+            <h2>Operações Bancárias</h2>
+            <div class="btn-grid">
+                <button id="btnDepositar" onclick="depositar()" disabled>Pagar Fatura</button>
+                <button id="btnSacar" onclick="sacar()" disabled>Sacar/Comprar</button>
+                <button id="btnSaldo" onclick="verSaldo()" disabled>Ver fatura</button>
+                <button id="btnMov" onclick="listarMovimentos()" disabled>Listar Movimentações</button>
+                <button id="btnTrocar" onclick="trocarConta()" disabled>Trocar Conta</button>
+                <button id="btnEncerrar" onclick="encerrarConta()" disabled>Encerrar Conta</button>
+            </div>
+        </section>
+        <section class="resultados">
+            <div class="resultado" id="resOperacoes"></div>
+        </section>
+        
+    </main>
+</body>
+</html>
