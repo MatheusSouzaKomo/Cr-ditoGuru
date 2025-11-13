@@ -9,8 +9,11 @@
 </head>
 <body>
     <header>
-        <h1>Guru's Bank</h1>
-        <h2>O banco da tecnologia.</h2>
+        <img src="img/gurus_co_logo_essencia.png" alt="" class="logo">
+        <div class="title">
+            <h1>Guru's Bank</h1>
+            <h2>O banco da tecnologia.</h2>
+        </div>
         <div id="hora" class="horario"></div>
     </header>
 
@@ -24,8 +27,8 @@
             <label>Tipo de Conta:</label>
             <select id="tipoConta">
                 <option value="corrente">Conta Corrente</option>
-                <option value="poupanca">Conta Poupança</option>[
-                <option value="credito">Cartão de Crédito</option>]
+                <option value="poupanca">Conta Poupança</option>
+                <option value="credito">Conta Crédito</option>
             </select>
 
             <div class="btn-grid">
@@ -37,12 +40,32 @@
         <section class="operacoes">
             <h2>Operações Bancárias</h2>
             <div class="btn-grid">
-                <button id="btnDepositar" onclick="pagarFatura()" disabled>Pagar Fatura</button>
-                <button id="btnSacar" onclick="comprar()" disabled>Comprar com limite</button>
-                <button id="btnSaldo" onclick="verSaldo()" disabled>Ver fatura</button>
-                <button id="btnMov" onclick="listarMovimentos()" disabled>Listar Movimentações</button>
-                <button id="btnTrocar" onclick="trocarConta()" disabled>Trocar Conta</button>
-                <button id="btnEncerrar" onclick="encerrarConta()" disabled>Encerrar Conta</button>
+
+                <button id="btnDepositar" onclick="pagarFatura()" disabled>
+                    <img src="img/icons/deposito_icon.svg" alt="">
+                    <p>Pagar Fatura</p>
+                </button>
+                <button id="btnSacar" onclick="comprar()" disabled>
+                    <img src="img/icons/saque_icon.svg" alt="">  
+                    <p>Sacar</p>
+                </button>
+                <button id="btnSaldo" onclick="verSaldo()" disabled>
+                    <img src="img/icons/ver_saldo_icon.svg" alt="">
+                    <p>Ver Saldo</p> 
+                </button>
+                <button id="btnMov" onclick="listarMovimentos()" disabled>
+                    <img src="img/icons/historico_icon.svg" alt="">
+                    <p>Listar Movimentações</p>
+                </button>
+                <button id="btnTrocar" onclick="trocarConta()" disabled>
+                    <img src="img/icons/troca_conta_icon.svg" alt="">
+                    <p>Trocar Conta</p>
+                </button>
+                <button id="btnEncerrar" onclick="encerrarConta()" disabled>
+                    <img src="img/icons/sair_icon.svg" alt="">
+                    <p>Encerrar Conta</p>
+                </button>
+
             </div>
         </section>
         <section class="resultados">
