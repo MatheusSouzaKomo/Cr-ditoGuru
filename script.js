@@ -54,11 +54,13 @@ if (tipo == "credito") {
     tipoConta: tipo,
     saldo: 0,
     ativa: true,
-    dataUltimoDeposito: null
+    fatura: 0, // para conta crédito
+    limite: 2000, // para conta crédito
+    dataUltimoDeposito: null // para conta poupança
 };
 movimentacoes = []; // limpa movimentações anteriores
 
-// Mensagem de sucesso
+    // Mensagem de sucesso
 
     document.getElementById("resConta").innerHTML =
     `✅ Conta <strong>${tipo}</strong> criada com sucesso para
@@ -70,9 +72,12 @@ movimentacoes = []; // limpa movimentações anteriores
     document.getElementById("tipoConta").disabled = true;
     document.getElementById("btnAbrir").disabled = true;
     habilitarOperacoes(true);
-    };
 
-/* ------------------------------------------------------------
+    // Mostra fatura se for conta de crédito
+    if (tipo === "credito") {
+        mostrarFatura();
+    }
+    };/* ------------------------------------------------------------
     Função que habilita ou desabilita os botões de operação
 ------------------------------------------------------------ */
 
@@ -99,7 +104,7 @@ return;
     }
     conta.saldo += valor;
 
-// Registra movimentação com data/hora
+// Registra movimentação com data/hora para poupança
     if (conta.tipoConta === "poupanca") {
         conta.dataUltimoDeposito = dataHora;
     }
@@ -110,6 +115,48 @@ return;
     ${conta.saldo.toFixed(2)}</strong>`;
     }
 
+//Função pagar Fatura
+    function pagarFatura() {
+        if (!contaAtiva()) return;
+    const valor = parseFloat(prompt("Digite o valor do pagamento da fatura:"));
+        if (isNaN(valor) || valor <= 0) {
+    alert("Valor inválido!");
+    return;
+    }
+
+    // Depósito para conta crédito paga a fatura
+    if(conta.tipoConta === "credito" && conta.fatura > 0) {
+        conta.fatura -= valor;
+        alert(`Depósito de R$ ${valor.toFixed(2)} realizado para pagar a fatura. Fatura atual: R$ ${conta.fatura.toFixed(2)}`);
+    }
+    else if(conta.fatura <= 0){
+        conta.fatura = 0;
+        alert(`Não há fatura a ser paga!`)
+    }
+
+     // Atualiza fatura se for conta de crédito
+    if (conta.tipoConta === "credito") {
+        mostrarFatura();
+    }
+}
+
+function comprar() {
+    if (!contaAtiva()) return;
+    const valor = parseFloat(prompt("Digite o valor da compra:"));
+        if (isNaN(valor) || valor <= 0) {
+    alert("Valor inválido!");
+    return;
+    }
+    if(conta.tipoConta === "credito") {
+        if (valor > conta.limite - conta.fatura) {
+            alert("Limite de crédito insuficiente para esta compra.");
+            return;
+        }   
+        conta.fatura += valor;
+        alert(`Compra de R$ ${valor.toFixed(2)} realizada com sucesso! Fatura atual: R$ ${conta.fatura.toFixed(2)}`);
+        mostrarFatura();
+    }
+}
 /* ------------------------------------------------------------
                         Função de saque
 ------------------------------------------------------------ */
@@ -285,4 +332,13 @@ function mostrarHora() {
 
   mostrarHora();
 
+// Área para mostrar a fatura atual da conta crédito
+  function mostrarFatura() {
+    if (!contaAtiva()) return;
+    document.getElementById("resOperacoesCredito").innerHTML =
+    `Cliente: <strong>${conta.nomeCliente}</strong><br>
+    Tipo de Conta: <strong>${conta.tipoConta}</strong><br>
+    Fatura Atual: <strong>R$ ${conta.fatura.toFixed(2)}</strong><br>
+    Limite de Crédito: <strong>R$ ${conta.limite.toFixed(2)}</strong>`;
+  }
  

@@ -28,6 +28,7 @@
             <select id="tipoConta">
                 <option value="corrente">Conta Corrente</option>
                 <option value="poupanca">Conta Poupança</option>
+                <option value="credito">Conta Crédito</option>
             </select>
 
             <div class="btn-grid">
@@ -39,11 +40,12 @@
         <section class="operacoes">
             <h2>Operações Bancárias</h2>
             <div class="btn-grid">
-                <button id="btnDepositar" onclick="depositar()" disabled>
+
+                <button id="btnDepositar" onclick="pagarFatura()" disabled>
                     <img src="img/icons/deposito_icon.svg" alt="">
-                    <p>Depositar</p>
+                    <p>Pagar Fatura</p>
                 </button>
-                <button id="btnSacar" onclick="sacar()" disabled>
+                <button id="btnSacar" onclick="comprar()" disabled>
                     <img src="img/icons/saque_icon.svg" alt="">  
                     <p>Sacar</p>
                 </button>
@@ -63,10 +65,12 @@
                     <img src="img/icons/sair_icon.svg" alt="">
                     <p>Encerrar Conta</p>
                 </button>
+
             </div>
         </section>
         <section class="resultados">
             <div class="resultado" id="resOperacoes"></div>
+            <div class="resultado" id="resOperacoesCredito"></div>
         </section>
         
     </main>
