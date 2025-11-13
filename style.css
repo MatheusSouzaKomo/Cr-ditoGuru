@@ -1,5 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
+
+
+*{
+    font-family: 'Orbitron', sans-serif;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
     background-image: url("img/bg-main.jpg");
     background-color: black;
     margin: 0;
@@ -14,16 +21,26 @@ body {
 
 header {
     position: relative;
-    background-color: #4c0e69;
+    background-color: #30004621;
     color: white;
     text-align: center;
     padding: 15px;
-    border-radius: 10px;
-    border: 2px solid #a820e7;
+    border-radius: 10px 0 10px 0;
+    border-bottom: 2px solid #a820e7;
     box-shadow:
         0 0 10px #a820e7,
         0 0 20px rgba(168, 32, 231, 0.6),
         inset 0 0 10px rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.logo {
+    width: 20px;
+    height: auto;
+    vertical-align: middle;
+    margin-right: 15px;
+    color: ;
 }
 
 .abertura, .operacoes, .resultados {
@@ -40,10 +57,22 @@ header {
     box-shadow: 0 0 10px gray;
 }
 
+.title{
+    margin: 0;
+}
+
+h1{
+    color: #e9e6f7;
+    text-align: center;
+    font-size: 4rem;
+    margin: 0;
+}
 
 h2 {
-color: #a820e7;
-text-align: center;
+    color: #a820e7;
+    text-align: center;
+    font-size: 2rem;
+    margin: 0 5px 10px 5px;
 }
 
 label {
@@ -93,8 +122,10 @@ button, input, select {
     width: 100%;
     max-width: 320px;
     padding: 14px 18px;
-    font-size: 1.05rem;
-    border-radius: 10px;
+    font-size: 1.1rem;
+    border-radius: 30px;
+    box-shadow: #b54fe4 1px 1px 10px;
+    transition: 0.2s ease;
 }
 
 input[type="text"], input[type="number"], input[type="email"], textarea, select {
@@ -149,15 +180,9 @@ background-color: #b54fe4;
 
 /* Cores por ação para melhor distinção */
 #btnAbrir {
-    background: linear-gradient(180deg,#7e15b1,#a820e7);
-    box-shadow: 0 8px 18px rgba(168,32,231,0.18);
+    background:#a820e7;
+    box-shadow: #b54fe4 1px 1px 10px;
 }
-#btnDepositar { background: linear-gradient(180deg,#169240,#1fbf4e); border-color: #12a43a; }
-#btnSacar { background: linear-gradient(180deg,#d36100,#ff8a2b); border-color: #d36100; }
-#btnSaldo { background: linear-gradient(180deg,#105fa6,#1481d6); border-color: #0f63a8; }
-#btnMov { background: linear-gradient(180deg,#5a5a5a,#7b7b7b); border-color: #5a5a5a; }
-#btnEncerrar { background: linear-gradient(180deg,#a80000,#ff3b3b); border-color: #a80000; }
-#btnTrocar { background: linear-gradient(180deg,#6a2fb5,#8e43f0); border-color: #6a2fb5; }
 
 button:disabled { opacity: 0.75; }
 
@@ -166,6 +191,7 @@ background-color: #35015f6b;
 color: rgba(255, 255, 255, 0.356);
 border: none;
 cursor: not-allowed;
+box-shadow: none;
 }
 
 .resultado {
