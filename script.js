@@ -1,16 +1,14 @@
 /* ===================================================================
 CÓDIGO JAVASCRIPT - SIMULADOR DE BANCO PRA GUARDAR DINHEIRO IMAGINÁRIO
 =================================================================== */
-// Variável de tempo passada para simular operações bancárias
-
 
 // Variáveis principais que armazenam a conta e suas movimentações
-
 let conta = null;
 let movimentacoes = [];
+let movimentacoesCredito = []; // Array separado para movimentações de crédito
 
 /* ------------------------------------------------------------
-             Função para obter a data/hora atual
+             Funções de Data e Hora
 ------------------------------------------------------------ */
 
 function obterDataHoraAtual() {
@@ -24,155 +22,192 @@ function obterDataHoraFormatada(data) {
 }
 
 /* ------------------------------------------------------------
-        Função para abrir uma nova conta bancária
+        Funções de Gerenciamento de Conta
 ------------------------------------------------------------ */
 
 function abrirConta() {
     const nome = document.getElementById("nome").value.trim();
     const tipo = document.getElementById("tipoConta").value;
-if (nome === "") {
-    alert("Obrigatório informar o nome, meu chapinha!");
-return;
-}
 
-if (tipo == "poupanca") {
-    alert("Conta poupança é sujeita á juros mensais ao sacar. Mantenha seu depósito por mais de 30 dias para ganhar juros!");
-}
-
-if (tipo == "corrente") {
-    alert("Conta corrente não possui juros ao sacar.");
+    if (nome === "") {
+        alert("Obrigatório informar o nome, meu chapinha!");
+        return;
     }
-if (tipo == "credito") {
-    alert("Cartão de crédito possui limite de crédito pré-aprovado. Utilize com responsabilidade!");
+
+    if (tipo == "poupanca") {
+        alert("Conta poupança é sujeita á juros mensais ao sacar. Mantenha seu depósito por mais de 30 dias para ganhar juros!");
     }
-     
 
+    if (tipo == "corrente") {
+        alert("Conta corrente não possui juros ao sacar.");
+    }
 
-// Criação do objeto "conta"
+    if (tipo == "credito") {
+        alert("Cartão de crédito possui limite de crédito pré-aprovado. Utilize com responsabilidade!");
+    }
+
+    // Criação do objeto "conta"
     conta = {
-    nomeCliente: nome,
-    tipoConta: tipo,
-    saldo: 0,
-    ativa: true,
-    fatura: 0, // para conta crédito
-    limite: 2000, // para conta crédito
-    dataUltimoDeposito: null // para conta poupança
-};
-movimentacoes = []; // limpa movimentações anteriores
+        nomeCliente: nome,
+        tipoConta: tipo,
+        saldo: 0,
+        ativa: true,
+        fatura: 0, // para conta crédito
+        limite: 2000, // para conta crédito
+        dataUltimoDeposito: null // para conta poupança
+    };
+
+    movimentacoes = []; // limpa movimentações anteriores
+    movimentacoesCredito = []; // limpa movimentações de crédito anteriores
 
     // Mensagem de sucesso
-
     document.getElementById("resConta").innerHTML =
-    `✅ Conta <strong>${tipo}</strong> criada com sucesso para
-    <strong>${nome}</strong>.`;
+        `✅ Conta <strong>${tipo}</strong> criada com sucesso para
+        <strong>${nome}</strong>.`;
 
-// Desabilita campos de abertura e habilita operações
-
+    // Desabilita campos de abertura e habilita operações
     document.getElementById("nome").disabled = true;
     document.getElementById("tipoConta").disabled = true;
     document.getElementById("btnAbrir").disabled = true;
     habilitarOperacoes(true);
+}
 
-    // Mostra fatura se for conta de crédito
-    if (tipo === "credito") {
-        mostrarFatura();
+function encerrarConta() {
+    if (!contaAtiva()) return;
+
+    const confirma = confirm("Tem certeza que deseja encerrar sua conta?");
+
+    if (confirma) {
+        conta.ativa = false;
+        document.getElementById("resOperacoes").innerHTML =
+            `Conta de <strong>${conta.nomeCliente}</strong> encerrada.`;
+
+        // Reseta campos e interface
+        document.getElementById("nome").value = "";
+        document.getElementById("tipoConta").value = "corrente";
+        document.getElementById("nome").disabled = false;
+        document.getElementById("tipoConta").disabled = false;
+        document.getElementById("btnAbrir").disabled = false;
+        habilitarOperacoes(false);
+
+        // Limpa dados da conta e movimentações
+        conta = null;
+        movimentacoes = [];
+        movimentacoesCredito = [];
+        document.getElementById("resConta").innerHTML = "";
     }
-    };/* ------------------------------------------------------------
-    Função que habilita ou desabilita os botões de operação
------------------------------------------------------------- */
+}
 
-function habilitarOperacoes(estado) {
-    document.getElementById("btnDepositar").disabled = !estado;
-    document.getElementById("btnSacar").disabled = !estado;
-    document.getElementById("btnSaldo").disabled = !estado;
-    document.getElementById("btnMov").disabled = !estado;
-    document.getElementById("btnEncerrar").disabled = !estado;
-    document.getElementById("btnTrocar").disabled = !estado;
+function trocarConta() {
+    if (conta && conta.ativa) {
+        const confirma = confirm("Você tem uma conta ativa. Deseja trocar de conta?");
+
+        // Reseta campos e interface
+        document.getElementById("nome").value = "";
+        document.getElementById("tipoConta").value = "corrente";
+        document.getElementById("nome").disabled = false;
+        document.getElementById("tipoConta").disabled = false;
+        document.getElementById("btnAbrir").disabled = false;
+
+        habilitarOperacoes(false);
+
+        if (!confirma) return;
+    }
 }
 
 /* ------------------------------------------------------------
-                    Função de depósito
+                    Funções de Operação
 ------------------------------------------------------------ */
 
-    function depositar() {
-        if (!contaAtiva()) return;
+function depositar() {
+    if (!contaAtiva()) return;
+
     const valor = parseFloat(prompt("Digite o valor do depósito:"));
     const dataHora = obterDataHoraAtual();
-        if (isNaN(valor) || valor <= 0) {
-alert("Valor inválido!");
-return;
+
+    if (isNaN(valor) || valor <= 0) {
+        alert("Valor inválido!");
+        return;
     }
+
     conta.saldo += valor;
 
-// Registra movimentação com data/hora para poupança
+    // Registra movimentação com data/hora para poupança
     if (conta.tipoConta === "poupanca") {
         conta.dataUltimoDeposito = dataHora;
     }
 
     movimentacoes.push(`${obterDataHoraFormatada(dataHora)} Depósito de R$ ${valor.toFixed(2)}`);
-        document.getElementById("resOperacoes").innerHTML =
-    ` Depósito concluído, feito por ${conta.nomeCliente}, Saldo atual: <strong>R$
-    ${conta.saldo.toFixed(2)}</strong>`;
-    }
+    document.getElementById("resOperacoes").innerHTML =
+        ` Depósito concluído, feito por ${conta.nomeCliente}, Saldo atual: <strong>R$
+        ${conta.saldo.toFixed(2)}</strong>`;
+}
 
-//Função pagar Fatura
-    function pagarFatura() {
-        if (!contaAtiva()) return;
+function pagarFatura() {
+    if (!contaAtiva()) return;
+
     const valor = parseFloat(prompt("Digite o valor do pagamento da fatura:"));
-        if (isNaN(valor) || valor <= 0) {
-    alert("Valor inválido!");
-    return;
+    const dataHora = obterDataHoraAtual();
+
+    if (isNaN(valor) || valor <= 0) {
+        alert("Valor inválido!");
+        return;
     }
 
     // Depósito para conta crédito paga a fatura
-    if(conta.tipoConta === "credito" && conta.fatura > 0) {
+    if (conta.tipoConta === "credito" && conta.fatura > 0) {
         conta.fatura -= valor;
+        // Registra movimentação de crédito
+        movimentacoesCredito.push(`${obterDataHoraFormatada(dataHora)} Pagamento de Fatura: R$ ${valor.toFixed(2)}`);
         alert(`Depósito de R$ ${valor.toFixed(2)} realizado para pagar a fatura. Fatura atual: R$ ${conta.fatura.toFixed(2)}`);
-    }
-    else if(conta.fatura <= 0){
+    } else if (conta.fatura <= 0) {
         conta.fatura = 0;
-        alert(`Não há fatura a ser paga!`)
+        alert(`Não há fatura a ser paga!`);
     }
-
-     // Atualiza fatura se for conta de crédito
-    if (conta.tipoConta === "credito") {
-        mostrarFatura();
+    if (valor > conta.fatura) {
+        alert(`O valor pago excede o valor da fatura. O valor da fatura foi zerado.`);
     }
 }
 
 function comprar() {
     if (!contaAtiva()) return;
+
     const valor = parseFloat(prompt("Digite o valor da compra:"));
-        if (isNaN(valor) || valor <= 0) {
-    alert("Valor inválido!");
-    return;
+    const dataHora = obterDataHoraAtual();
+
+    if (isNaN(valor) || valor <= 0) {
+        alert("Valor inválido!");
+        return;
     }
-    if(conta.tipoConta === "credito") {
+
+    if (conta.tipoConta === "credito") {
         if (valor > conta.limite - conta.fatura) {
             alert("Limite de crédito insuficiente para esta compra.");
             return;
-        }   
+        }
         conta.fatura += valor;
+        // Registra movimentação de crédito
+        movimentacoesCredito.push(`${obterDataHoraFormatada(dataHora)} Compra: R$ ${valor.toFixed(2)}`);
         alert(`Compra de R$ ${valor.toFixed(2)} realizada com sucesso! Fatura atual: R$ ${conta.fatura.toFixed(2)}`);
-        mostrarFatura();
     }
 }
-/* ------------------------------------------------------------
-                        Função de saque
------------------------------------------------------------- */
 
-    function sacar() {
-        if (!contaAtiva()) return;
+function sacar() {
+    if (!contaAtiva()) return;
+
     const valor = parseFloat(prompt("Digite o valor do saque:"));
-        if (isNaN(valor) || valor <= 0) {
+
+    if (isNaN(valor) || valor <= 0) {
         alert("Valor inválido");
-    return;
+        return;
     }
-        if (valor > conta.saldo) {
+
+    if (valor > conta.saldo) {
         alert("Saldo insuficiente");
-    return;
+        return;
     }
-// Definição dos juros para conta poupança
+
+    // Definição dos juros para conta poupança
     let valorFinalSaque = valor;
     let juros = 0;
     let aviso = "";
@@ -211,22 +246,23 @@ function comprar() {
 
     conta.saldo -= valorFinalSaque;
 
-// Registra movimentação com data/hora
+    // Registra movimentação com data/hora
     let registroMovimentacao = `Saque de R$ ${valor.toFixed(2)}`;
     if (juros > 0) {
         registroMovimentacao += ` (com juros de R$ ${juros.toFixed(2)})`;
     }
 
     movimentacoes.push(`${obterDataHoraFormatada(dataSaque)} ${registroMovimentacao}`);
-        document.getElementById("resOperacoes").innerHTML =
+    document.getElementById("resOperacoes").innerHTML =
         ` Saque realizado, por ${conta.nomeCliente},  Saldo atual: <strong>R$
-    ${conta.saldo.toFixed(2)}</strong>`;
-    }
+        ${conta.saldo.toFixed(2)}</strong>`;
+}
 
 /* ------------------------------------------------------------
-            Função para exibir o saldo atual
+            Funções de Visualização
 ------------------------------------------------------------ */
 
+<<<<<<< HEAD
     function verSaldo() {
     if (!contaAtiva()) return;
 
@@ -248,90 +284,92 @@ function comprar() {
     `;
 }
 
+=======
+function verSaldo() {
+    if (!contaAtiva()) return;
 
-/* ------------------------------------------------------------
-    Função para listar todas as movimentações registradas
------------------------------------------------------------- */
-    function listarMovimentos() {
-        if (!contaAtiva()) return;
-        if (movimentacoes.length === 0) {
+    // Lógica para calcular dias restantes para juros (apenas para exibição)
+    const diasRestantes = conta.tipoConta === "poupanca" && conta.dataUltimoDeposito ?
+        Math.max(0, 30 - Math.floor((obterDataHoraAtual() - conta.dataUltimoDeposito) / (1000 * 60 * 60 * 24))) :
+        'N/A';
+>>>>>>> ff39dd4a34ec0419e43495fa9af35522159a369d
+
     document.getElementById("resOperacoes").innerHTML =
-        "Nenhuma movimentação registrada no sistema.";
+        `Conta de ${conta.nomeCliente},  Saldo atual de: <strong>R$ ${conta.saldo.toFixed(2)}</strong>, Faltam exatamente ${diasRestantes} dias para ganhar juros no próximo saque.`;
+}
+
+function listarMovimentos() {
+    if (!contaAtiva()) return;
+
+    // Se for conta de crédito, mostra movimentações de crédito
+    if (conta.tipoConta === "credito") {
+        if (movimentacoesCredito.length === 0) {
+            document.getElementById("resOperacoes").innerHTML =
+                "Nenhuma movimentação registrada nesta conta de crédito.";
+            return;
+        }
+
+        const cabecalho = `
+            <strong>Cliente: </strong> ${conta.nomeCliente} |
+            <strong>Tipo de Conta: </strong> ${conta.tipoConta}
+            <hr>`;
+
+        const lista = movimentacoesCredito.join("<br>");
+        document.getElementById("resOperacoes").innerHTML =
+            `${cabecalho} <strong>📜 Movimentações de Crédito:</strong><br> ${lista}`;
         return;
     }
+
+    // Para outras contas, mostra movimentações normais
+    if (movimentacoes.length === 0) {
+        document.getElementById("resOperacoes").innerHTML =
+            "Nenhuma movimentação registrada no sistema.";
+        return;
+    }
+
     // Construção do cabeçalho para melhor exibição;
     const cabecalho = `
-    <strong> Cliente: </strong> ${conta.nomeCliente} |
-    <strong> Tipo de Conta: </strong> ${conta.tipoConta} 
-    <hr> `;
+        <strong> Cliente: </strong> ${conta.nomeCliente} |
+        <strong> Tipo de Conta: </strong> ${conta.tipoConta}
+        <hr> `;
+
     // Lista de movimentações formatada
-        const lista = movimentacoes.join("<br>" );
+    const lista = movimentacoes.join("<br>");
     document.getElementById("resOperacoes").innerHTML =
         `${cabecalho} <strong>📜 Movimentações:</strong><br> ${lista}`;
-    }
+}
 
-/* ------------------------------------------------------------
-        Função para encerrar a conta e limpar os dados
------------------------------------------------------------- */
+function mostrarFatura() {
+    if (!contaAtiva()) return;
 
-    function encerrarConta() {
-        if (!contaAtiva()) return;
-    const confirma = confirm("Tem certeza que deseja encerrar sua conta?");
-        if (confirma) {
-        conta.ativa = false;
-    document.getElementById("resOperacoes").innerHTML =
-        `Conta de <strong>${conta.nomeCliente}</strong> encerrada.`;
-
-// Reseta campos e interface
-
-    document.getElementById("nome").value = "";
-    document.getElementById("tipoConta").value = "corrente";
-    document.getElementById("nome").disabled = false;
-    document.getElementById("tipoConta").disabled = false;
-    document.getElementById("btnAbrir").disabled = false;
-    habilitarOperacoes(false);
-
-// Limpa dados da conta e movimentações
-
-    conta = null;
-    movimentacoes = [];
-    document.getElementById("resConta").innerHTML = "";
-    }
+    document.getElementById("resOperacoesCredito").innerHTML =
+        `Cliente: <strong>${conta.nomeCliente}</strong><br>
+        Tipo de Conta: <strong>${conta.tipoConta}</strong><br>
+        Fatura Atual: <strong>R$ ${conta.fatura.toFixed(2)}</strong><br>
+        Limite de Crédito: <strong>R$ ${conta.limite.toFixed(2)}</strong>`;
 }
 
 /* ------------------------------------------------------------
-    Função auxiliar que verifica se há conta ativa
+            Funções Auxiliares e Inicialização
 ------------------------------------------------------------ */
 
-    function contaAtiva() {
-        if (!conta || !conta.ativa) {
-    alert("Nenhuma conta logada. Logue em sua conta ou crie uma.");
+function habilitarOperacoes(estado) {
+    document.getElementById("btnDepositar").disabled = !estado;
+    document.getElementById("btnSacar").disabled = !estado;
+    document.getElementById("btnSaldo").disabled = !estado;
+    document.getElementById("btnMov").disabled = !estado;
+    document.getElementById("btnEncerrar").disabled = !estado;
+    document.getElementById("btnTrocar").disabled = !estado;
+}
+
+function contaAtiva() {
+    if (!conta || !conta.ativa) {
+        alert("Nenhuma conta logada. Logue em sua conta ou crie uma.");
         return false;
     }
-        return true;
+    return true;
 }
 
-/* ------------------------------------------------------------
-    Função que troca de conta.
------------------------------------------------------------- */
-
-function trocarConta() {
-    if (conta && conta.ativa) {
-    const confirma = confirm("Você tem uma conta ativa. Deseja trocar de conta?");
-
-// Reseta campos e interface
-    document.getElementById("nome").value = "";
-    document.getElementById("tipoConta").value = "corrente";
-    document.getElementById("nome").disabled = false;
-    document.getElementById("tipoConta").disabled = false;
-    document.getElementById("btnAbrir").disabled = false;
-
-    habilitarOperacoes(false);
-
-
-        if (!confirma) return;
-    }
-}
 // Função para mostrar a hora atual no sistema
 function mostrarHora() {
     const agora = new Date(); // pega data e hora atuais
@@ -342,10 +380,11 @@ function mostrarHora() {
 
     const horaFormatada = `${horas}:${minutos}:${segundos}`;
     document.getElementById("hora").textContent = horaFormatada, data;
-  }
+}
 
-  setInterval(mostrarHora, 1000);
+setInterval(mostrarHora, 1000);
 
+<<<<<<< HEAD
   mostrarHora();
 
 // Área para mostrar a fatura atual da conta crédito
@@ -360,3 +399,6 @@ function mostrarHora() {
  
 
   
+=======
+mostrarHora();
+>>>>>>> ff39dd4a34ec0419e43495fa9af35522159a369d
