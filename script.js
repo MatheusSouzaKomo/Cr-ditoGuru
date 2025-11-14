@@ -262,7 +262,6 @@ function sacar() {
             Funções de Visualização
 ------------------------------------------------------------ */
 
-<<<<<<< HEAD
     function verSaldo() {
     if (!contaAtiva()) return;
 
@@ -282,21 +281,12 @@ function sacar() {
         <div class="linha">Saldo atual: <strong>R$ ${conta.saldo.toFixed(2)}</strong></div>
         <div class="linha">Dias para juros: <strong>${diasFaltando}</strong></div>
     `;
-}
+    }
 
-=======
-function verSaldo() {
-    if (!contaAtiva()) return;
-
-    // Lógica para calcular dias restantes para juros (apenas para exibição)
-    const diasRestantes = conta.tipoConta === "poupanca" && conta.dataUltimoDeposito ?
-        Math.max(0, 30 - Math.floor((obterDataHoraAtual() - conta.dataUltimoDeposito) / (1000 * 60 * 60 * 24))) :
-        'N/A';
->>>>>>> ff39dd4a34ec0419e43495fa9af35522159a369d
 
     document.getElementById("resOperacoes").innerHTML =
         `Conta de ${conta.nomeCliente},  Saldo atual de: <strong>R$ ${conta.saldo.toFixed(2)}</strong>, Faltam exatamente ${diasRestantes} dias para ganhar juros no próximo saque.`;
-}
+
 
 function listarMovimentos() {
     if (!contaAtiva()) return;
@@ -384,7 +374,6 @@ function mostrarHora() {
 
 setInterval(mostrarHora, 1000);
 
-<<<<<<< HEAD
   mostrarHora();
 
 // Área para mostrar a fatura atual da conta crédito
@@ -399,6 +388,3 @@ setInterval(mostrarHora, 1000);
  
 
   
-=======
-mostrarHora();
->>>>>>> ff39dd4a34ec0419e43495fa9af35522159a369d
