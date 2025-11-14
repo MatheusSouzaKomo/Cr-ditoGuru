@@ -164,6 +164,9 @@ function pagarFatura() {
         conta.fatura = 0;
         alert(`Não há fatura a ser paga!`);
     }
+    if (valor > conta.fatura) {
+        alert(`O valor pago excede o valor da fatura. O valor da fatura foi zerado.`);
+    }
 }
 
 function comprar() {
