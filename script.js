@@ -228,10 +228,26 @@ function comprar() {
 ------------------------------------------------------------ */
 
     function verSaldo() {
-        if (!contaAtiva()) return;
-    document.getElementById("resOperacoes").innerHTML =
-        `Conta de ${conta.nomeCliente},  Saldo atual de: <strong>R$ ${conta.saldo.toFixed(2)}</strong>, Faltam exatamente ${conta.tipoConta === "poupanca" && conta.dataUltimoDeposito ? Math.max(0, 30 - Math.floor((obterDataHoraAtual() - conta.dataUltimoDeposito) / (1000 * 60 * 60 * 24))) : 'N/A'} dias para ganhar juros no próximo saque.`;
-    }
+    if (!contaAtiva()) return;
+
+    const diasFaltando = 
+        conta.tipoConta === "poupanca" && conta.dataUltimoDeposito
+            ? Math.max(
+                0,
+                30 - Math.floor(
+                    (obterDataHoraAtual() - conta.dataUltimoDeposito) /
+                    (1000 * 60 * 60 * 24)
+                )
+              )
+            : 'N/A';
+
+    document.getElementById("resOperacoes").innerHTML = `
+        <div class="linha">Conta de: <strong>${conta.nomeCliente}</strong></div>
+        <div class="linha">Saldo atual: <strong>R$ ${conta.saldo.toFixed(2)}</strong></div>
+        <div class="linha">Dias para juros: <strong>${diasFaltando}</strong></div>
+    `;
+}
+
 
 /* ------------------------------------------------------------
     Função para listar todas as movimentações registradas
@@ -342,3 +358,5 @@ function mostrarHora() {
     Limite de Crédito: <strong>R$ ${conta.limite.toFixed(2)}</strong>`;
   }
  
+
+  

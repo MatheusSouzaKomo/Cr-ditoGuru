@@ -25,12 +25,11 @@
             <input type="text" id="nome">
 
             <label>Tipo de Conta:</label>
-            <select id="tipoConta">
-                <option value="corrente">Conta Corrente</option>
+            <select id="tipoConta" name="tipoConta" hidden>
+                <option value="corrente" selected>Conta Corrente</option>
                 <option value="poupanca">Conta Poupança</option>
                 <option value="credito">Conta Crédito</option>
             </select>
-
             <div class="btn-grid">
                 <button id="btnAbrir" onclick="abrirConta()">Abrir Conta</button>
             </div>
@@ -72,7 +71,19 @@
             <div class="resultado" id="resOperacoes"></div>
             <div class="resultado" id="resOperacoesCredito"></div>
         </section>
-        
     </main>
+    <footer>
+        <div class="redes-sociais">
+            <a href="https://www.instagram.com/gurus_company/" target="_blank">
+                <img src="img/icons/instagram.png" alt="Instagram">
+                <p>Instagram</p>
+            </a>
+            <a href="https://www.linkedin.com/company/gurus-company/" target="_blank">
+                <img src="img/icons/linkedin.png" alt="LinkedIn">
+                <p>LinkedIn</p>
+            </a>
+        </div>
+        <p>&copy; 2024 Guru's Bank. Todos os direitos reservados.</p>
+    </footer>
 </body>
 </html>
